@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -23,5 +23,14 @@ class AuthController extends Controller
             'email'=> $fields['email'],
             'password'=> bcrypt($fields['password'])
         ]);
+
+        $token = $user->createToken('myapptoken')->plainTextToken;
+
+        $response = [
+            'user' => $user,
+            'token' => $token
+        ];
+
+        return response($response, 201);
     }
 }
